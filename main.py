@@ -36,22 +36,6 @@ import multiprocessing as mp
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-from utils.ewc import EWC
-
-
-def sp_module(current_module, init_module, shrink_factor, epsilon):
-    use_device = next(current_module.parameters()).device
-    init_params = list(init_module.to(use_device).parameters())
-    for idx, current_param in enumerate(current_module.parameters()):
-        current_param.data *= shrink_factor
-        current_param.data += epsilon * init_params[idx].data
-
-
-def shrink_perturb(model, factor=1e-6):
-    new_model = Agent(None)
-    sp_module(model, new_model, 1 - factor, factor)
-
-
 def save_frames_as_gif(frames, filename="episode_recording.gif"):
     """z
     Saves a list of frames as a GIF file.
@@ -297,7 +281,7 @@ if __name__ == "__main__":
 
     device = torch.device("cuda" if torch.cuda.is_available() and args.cuda else "cpu")
 
-    tasks = ["Obstacles-v1", "Green-v1", "Resized-v1", "Monsters-v1", "Default-v1", "Red-v1", "Blue-v1", "Shadows-v1"]
+    tasks = ["Default-v1"] #["Obstacles-v1", "Green-v1", "Resized-v1", "Monsters-v1", "Default-v1", "Red-v1", "Blue-v1", "Shadows-v1"]
     current_task = 0
     register_custom_folder(args.env_floder)
 
